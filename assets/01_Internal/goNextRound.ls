@@ -1,1 +1,0 @@
-global gGameon goNextRound me  gGame.nextLevel()  set the keyUpScript to EMPTYend

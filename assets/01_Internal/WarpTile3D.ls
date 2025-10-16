@@ -1,1 +1,0 @@
-property ancestor, pGame, pwarplocon new me, pX, pY, pZ, spriteMember, tileType, walk, warpto, gameObj  me.ancestor = script("tile3D").new(pX, pY, pZ, spriteMember, tileType, walk)  pwarploc = warpto  pGame = gameObj  return meendon dieOnGridLoc me, player  sound(1).play(member("warpSound", "sounds"))  playerFace = player.getFace()  pGame.playeronwarp(pwarploc)end

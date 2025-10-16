@@ -1,1 +1,0 @@
-global _DGSBIOS, gGameon mouseEnter me  cursor(280)endon mouseLeave me  cursor(-1)endon mouseDown me  cursor(-1)  _DGSBIOS.sendScore(gGame.getScore())  go("sendscoreframe")end
