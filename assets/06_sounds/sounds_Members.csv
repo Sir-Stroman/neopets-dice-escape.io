@@ -1,8 +1,0 @@
-Number,Type,Name,Registration Point,Filename
-1,sound,buttonSound,"(0, 0)",
-2,sound,playerMoveSound,"(0, 0)",
-3,sound,deathSound,"(0, 0)",
-4,sound,coinSound,"(0, 0)",
-5,sound,goalSound,"(0, 0)",
-6,sound,warpSound,"(0, 0)",
-7,sound,triggerSound,"(0, 0)",
