@@ -7,13 +7,13 @@ export class SoundManager {
 
     async loadSounds() {
         const soundFiles = [
-            { key: 'button', path: '/assets/06_sounds/sounds_1_buttonSound.wav' },
-            { key: 'playerMove', path: '/assets/06_sounds/sounds_2_playerMoveSound.wav' },
-            { key: 'death', path: '/assets/06_sounds/sounds_3_deathSound.wav' },
-            { key: 'coin', path: '/assets/06_sounds/sounds_4_coinSound.wav' },
-            { key: 'goal', path: '/assets/06_sounds/sounds_5_goalSound.wav' },
-            { key: 'warp', path: '/assets/06_sounds/sounds_6_warpSound.wav' },
-            { key: 'trigger', path: '/assets/06_sounds/sounds_7_triggerSound.wav' }
+            { key: 'button', path: './assets/06_sounds/sounds_1_buttonSound.wav' },
+            { key: 'playerMove', path: './assets/06_sounds/sounds_2_playerMoveSound.wav' },
+            { key: 'death', path: './assets/06_sounds/sounds_3_deathSound.wav' },
+            { key: 'coin', path: './assets/06_sounds/sounds_4_coinSound.wav' },
+            { key: 'goal', path: './assets/06_sounds/sounds_5_goalSound.wav' },
+            { key: 'warp', path: './assets/06_sounds/sounds_6_warpSound.wav' },
+            { key: 'trigger', path: './assets/06_sounds/sounds_7_triggerSound.wav' }
         ];
 
         for (const soundFile of soundFiles) {
@@ -52,3 +52,4 @@ export class SoundManager {
         return this.enabled;
     }
 }
+

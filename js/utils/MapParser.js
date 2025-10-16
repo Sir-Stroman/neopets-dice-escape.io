@@ -7,7 +7,7 @@ export class MapParser {
     static async loadLevelCache(progressCallback) {
         console.log('Loading level cache from JSON...');
         try {
-            const response = await fetch('/js/data/levelCache.json');
+            const response = await fetch('js/data/levelCache.json');
             const cacheData = await response.json();
 
             // Convert array to indexed object
@@ -39,3 +39,4 @@ export class MapParser {
         return MapParser.levelCache[levelIndex] || null;
     }
 }
+

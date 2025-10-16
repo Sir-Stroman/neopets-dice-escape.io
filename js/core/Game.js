@@ -234,26 +234,26 @@ export class Game {
 
         const textureLoader = new THREE.TextureLoader();
         const texturesToLoad = [
-            { key: 'plainTile', path: '/assets/textures/3d Cast_2_plainTile.png' },
-            { key: 'triggerTile', path: '/assets/textures/3d Cast_3_triggerTile.png' },
-            { key: 'fallingTile', path: '/assets/textures/3d Cast_4_falling_tile.png' },
-            { key: 'redTile', path: '/assets/textures/3d Cast_5_redTile.png' },
-            { key: 'wood', path: '/assets/textures/3d Cast_22_wood.png' },
-            { key: 'goalTile', path: '/assets/textures/3d Cast_23_goal_tile.png' },
-            { key: 'floormap', path: '/assets/textures/3d Cast_20_floormap.png' },
-            { key: 'dieFace1', path: '/assets/textures/3d Cast_6_die_1.png' },
-            { key: 'dieFace2', path: '/assets/textures/3d Cast_7_die_2.png' },
-            { key: 'dieFace3', path: '/assets/textures/3d Cast_8_die_3.png' },
-            { key: 'dieFace4', path: '/assets/textures/3d Cast_9_die_4.png' },
-            { key: 'dieFace5', path: '/assets/textures/3d Cast_10_die_5.png' },
-            { key: 'dieFace6', path: '/assets/textures/3d Cast_11_die_6.png' },
-            { key: 'coin5', path: '/assets/textures/3d Cast_15_coin_5.png' },
-            { key: 'coin10', path: '/assets/textures/3d Cast_16_coin_10.png' },
-            { key: 'coin25', path: '/assets/textures/coin25.png' },
-            { key: 'coin25bump', path: '/assets/textures/coin25_bumpmap.png' },
-            { key: 'background1', path: '/assets/textures/art_16_camera_bg1.png' },
-            { key: 'background2', path: '/assets/textures/art_17_camera_bg2.png' },
-            { key: 'background3', path: '/assets/textures/art_18_camera_bg3.png' }
+            { key: 'plainTile', path: './assets/textures/3d Cast_2_plainTile.png' },
+            { key: 'triggerTile', path: './assets/textures/3d Cast_3_triggerTile.png' },
+            { key: 'fallingTile', path: './assets/textures/3d Cast_4_falling_tile.png' },
+            { key: 'redTile', path: './assets/textures/3d Cast_5_redTile.png' },
+            { key: 'wood', path: './assets/textures/3d Cast_22_wood.png' },
+            { key: 'goalTile', path: './assets/textures/3d Cast_23_goal_tile.png' },
+            { key: 'floormap', path: './assets/textures/3d Cast_20_floormap.png' },
+            { key: 'dieFace1', path: './assets/textures/3d Cast_6_die_1.png' },
+            { key: 'dieFace2', path: './assets/textures/3d Cast_7_die_2.png' },
+            { key: 'dieFace3', path: './assets/textures/3d Cast_8_die_3.png' },
+            { key: 'dieFace4', path: './assets/textures/3d Cast_9_die_4.png' },
+            { key: 'dieFace5', path: './assets/textures/3d Cast_10_die_5.png' },
+            { key: 'dieFace6', path: './assets/textures/3d Cast_11_die_6.png' },
+            { key: 'coin5', path: './assets/textures/3d Cast_15_coin_5.png' },
+            { key: 'coin10', path: './assets/textures/3d Cast_16_coin_10.png' },
+            { key: 'coin25', path: './assets/textures/coin25.png' },
+            { key: 'coin25bump', path: './assets/textures/coin25_bumpmap.png' },
+            { key: 'background1', path: './assets/textures/art_16_camera_bg1.png' },
+            { key: 'background2', path: './assets/textures/art_17_camera_bg2.png' },
+            { key: 'background3', path: './assets/textures/art_18_camera_bg3.png' }
         ];
 
         const totalTextures = texturesToLoad.length;
@@ -1441,3 +1441,4 @@ export class Game {
         console.log(`Player reset to position [${this.playerStartZ}, ${this.playerStartX}] with face ${this.playerStartFace}`);
     }
 }
+
