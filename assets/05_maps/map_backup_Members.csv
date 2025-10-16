@@ -1,0 +1,5 @@
+Number,Type,Name,Registration Point,Filename
+1,text,default map,"(0, 0)",
+2,text,defaultMap -- only tiles,"(0, 0)",
+3,text,squarelevel,"(0, 0)",
+4,text,super_bonus_level,"(0, 0)",
