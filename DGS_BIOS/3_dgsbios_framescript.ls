@@ -1,1 +1,0 @@
-global _DGSBIOSon exitFrame me  _DGSBIOS.controlFlow()  go(the frame)end
