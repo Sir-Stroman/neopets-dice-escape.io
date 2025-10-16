@@ -1,0 +1,5 @@
+Number,Type,Name,Registration Point,Filename
+1,flash,dgs_flash_loader,"(160, 120)",
+2,script,dgsbios_class_bios,"(0, 0)",
+3,script,dgsbios_framescript,"(0, 0)",
+4,script,dgsbios_functions,"(0, 0)",

@@ -1,0 +1,1 @@
+global gActorson doCleanup  gActors = []  repeat with x = 1 to the number of castMembers of castLib "created"    obj = member(x, "created")    obj.erase()  end repeatend

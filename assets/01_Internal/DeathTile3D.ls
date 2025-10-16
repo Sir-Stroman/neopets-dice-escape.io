@@ -1,0 +1,1 @@
+property ancestoron new me, pX, pY, pZ, spriteMember, tileType, walk  me.ancestor = script("tile3D").new(pX, pY, pZ, spriteMember, tileType, walk)  return meendon dieOnGridLoc me, player  player.death()end

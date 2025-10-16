@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Escape</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Impact, Arial, sans-serif;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            width: 480px;
+            height: 460px;
+            background-color: #222;
+            border: 2px solid #444;
+        }
+
+        #game-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 480px;
+            height: 460px;
+            display: block;
+        }
+
+        #ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 480px;
+            height: 100px;
+            background: transparent;
+            color: white;
+            padding: 10px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        #ui-overlay .button {
+            pointer-events: all;
+        }
+
+        #score-display {
+            font-family: Impact, Arial, sans-serif;
+            font-size: 20px;
+            font-weight: normal;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+        }
+
+        #lives-display {
+            font-family: Impact, Arial, sans-serif;
+            font-size: 20px;
+            font-weight: normal;
+            margin-top: 5px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+        }
+
+        #level-display {
+            font-family: Impact, Arial, sans-serif;
+            font-size: 20px;
+            font-weight: normal;
+            margin-top: 5px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+        }
+
+        #round-score-display {
+            font-family: Impact, Arial, sans-serif;
+            font-size: 20px;
+            font-weight: normal;
+            color: #ffffff;
+            position: absolute;
+            top: 33px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+        }
+
+        #timer-display {
+            font-family: Impact, Arial, sans-serif;
+            font-size: 20px;
+            font-weight: normal;
+            color: #ffffff;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+        }
+
+        .button {
+            position: absolute;
+            padding: 5px 10px;
+            border: none;
+            background-color: transparent;
+            color: white;
+            cursor: pointer;
+            font-family: Impact, Arial, sans-serif;
+            font-size: 18px;
+            font-weight: normal;
+            text-align: center;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        .button:hover {
+            filter: brightness(1.1);
+        }
+
+        #retry-button {
+            top: 50px;
+            right: 10px;
+            background-image: url('/assets/textures/art_12_sbg.png');
+            width: 110px;
+            height: 40px;
+        }
+
+        #end-game-button {
+            top: 10px;
+            right: 10px;
+            background-image: url('/assets/textures/art_12_sbg.png');
+            width: 110px;
+            height: 40px;
+        }
+
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #loading-progress {
+            width: 300px;
+            height: 30px;
+            background-color: #333;
+            border: 2px solid #666;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        #loading-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(to right, #0066ff, #00ccff);
+            transition: width 0.3s;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #level-complete-screen {
+            position: absolute;
+            top: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Impact, Arial, sans-serif;
+            pointer-events: none;
+        }
+
+        #level-complete-screen .title {
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #level-complete-screen .stats {
+            font-size: 20px;
+            font-weight: normal;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        #level-complete-screen .continue {
+            font-size: 20px;
+            font-weight: normal;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+            margin-top: 20px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+
+        #menu-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 480px;
+            height: 460px;
+            background-image: url('/assets/textures/3d Cast_14_menu_options_texture.png');
+            background-size: 480px 460px;
+            background-repeat: no-repeat;
+            z-index: 500;
+        }
+
+        #instructions-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 480px;
+            height: 460px;
+            background-image: url('/assets/textures/3d Cast_13_menu_instructions_texture.png');
+            background-size: 480px 460px;
+            background-repeat: no-repeat;
+            z-index: 500;
+        }
+
+        .invisible-button {
+            position: absolute;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .invisible-button:hover,
+        .invisible-button:active,
+        .invisible-button:focus {
+            background-color: transparent;
+            outline: none;
+        }
+
+        #end-game-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 480px;
+            height: 460px;
+            background-image: url('/assets/textures/art_14_endgame_bg.png');
+            background-size: 480px 460px;
+            background-repeat: no-repeat;
+            z-index: 500;
+        }
+
+        #end-game-text {
+            position: absolute;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        #game-over-title {
+            font-family: Impact, Arial, sans-serif;
+            font-size: 15pt;
+            font-weight: normal;
+            color: #ffff00;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+            margin-bottom: 10px;
+        }
+
+        #final-score-line,
+        #final-level-line {
+            font-family: Impact, Arial, sans-serif;
+            font-size: 15pt;
+            font-weight: normal;
+            color: #ffff00;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+            line-height: 1.4;
+        }
+
+        #send-score-button {
+            position: absolute;
+            background-color: transparent;
+            background-image: url('/assets/textures/art_10_sendscorebutton.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+
+        #send-score-button:hover {
+            filter: brightness(1.1);
+        }
+
+        #restart-button {
+            position: absolute;
+            background-color: transparent;
+            background-image: url('/assets/textures/art_15_restartbutton.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+
+        #restart-button:hover {
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="loading-screen">
+            <h1>Dice Escape</h1>
+            <p>Loading...</p>
+            <div id="loading-progress">
+                <div id="loading-bar"></div>
+            </div>
+            <p id="loading-text">0%</p>
+        </div>
+
+        <div id="menu-screen" class="hidden">
+            <button class="invisible-button" id="start-game-button"
+                    style="left: 11px; top: 268px; width: 280px; height: 49px;"></button>
+            <button class="invisible-button" id="instructions-button"
+                    style="left: 36px; top: 329px; width: 257px; height: 53px;"></button>
+        </div>
+
+        <div id="instructions-screen" class="hidden">
+            <button class="invisible-button" id="back-button"
+                    style="left: 95px; top: 403px; width: 120px; height: 40px;"></button>
+        </div>
+
+        <div id="end-game-screen" class="hidden">
+            <div id="end-game-text" style="left: 47px; top: 205px; width: 280px; height: 120px;">
+                <div id="game-over-title">Game Over</div>
+                <div id="final-score-line">Your Score: <span id="final-score-value">0</span></div>
+                <div id="final-level-line">You Reached Level <span id="final-level-value">1</span></div>
+            </div>
+            <button id="send-score-button" style="left: 39px; top: 323px; width: 239px; height: 60px;"></button>
+            <button id="restart-button" style="left: 39px; top: 384px; width: 239px; height: 60px;"></button>
+        </div>
+
+        <div id="ui-overlay">
+            <div id="score-display">Score: 0</div>
+            <div id="lives-display">Lives: 3</div>
+            <div id="level-display">Level: 1</div>
+            <div id="timer-display">Time: 60</div>
+            <div id="round-score-display">Round Pts 100</div>
+            <button class="button" id="end-game-button">End Game</button>
+            <button class="button" id="retry-button">Retry Level</button>
+
+            <div id="level-complete-screen" class="hidden">
+                <div class="title" id="level-complete-title">LEVEL 1 CLEAR!!!</div>
+                <div class="stats">
+                    <div id="round-score-text">ROUND SCORE: 100</div>
+                    <div id="time-remaining-text">TIME REMAINING: 60</div>
+                    <div id="time-bonus-text">TIME BONUS: 20</div>
+                    <div id="your-score-text">YOUR SCORE: 120</div>
+                </div>
+                <div class="continue">&lt;press any key to continue&gt;</div>
+            </div>
+        </div>
+
+        <canvas id="game-canvas"></canvas>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+</body>
+</html>

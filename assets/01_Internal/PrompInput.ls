@@ -1,0 +1,1 @@
+property pGame, pStart, deleteMeglobal grounddone, gActorson new me, gameObj  grounddone = 0  pGame = gameObj  deleteMe = 0  pStart = the milliSeconds  gActors.append(me)  return meendon step me  elapsed = the milliSeconds - pStart  if elapsed > 1000 then    grounddone = 1    deleteMe = 1  end ifend

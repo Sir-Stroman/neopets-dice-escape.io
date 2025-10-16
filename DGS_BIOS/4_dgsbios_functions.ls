@@ -1,0 +1,1 @@
+on GetUrl me, url  if offset("javascript", url) > 0 then    gotoNetPage(url)  else    gotoNetPage(url, "_blank")  end ifend

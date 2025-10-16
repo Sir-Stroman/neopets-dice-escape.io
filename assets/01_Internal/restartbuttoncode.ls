@@ -1,0 +1,1 @@
+global _DGSBIOSon mouseEnter me  cursor(280)endon mouseLeave me  cursor(-1)endon mouseDown me  cursor(-1)  _DGSBIOS.restartGame()end

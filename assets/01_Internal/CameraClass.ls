@@ -1,0 +1,1 @@
+property pcamera, pNullObjon new me, cam, camNull  pcamera = cam  pNullObj = camNull  pcamera.parent = pNullObj  return meendon focusOn me, m  pos = m.worldPosition  pcamera.pointAt(pos)endon rotatecamera me, amt  pNullObj.rotate(0, amt, 0)end

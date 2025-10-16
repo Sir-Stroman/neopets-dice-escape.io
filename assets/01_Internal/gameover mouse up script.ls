@@ -1,0 +1,1 @@
+global gGameon gameoverclick  mouse_row = the mouseV / 47  mouse_col = the mouseH / 120  if mouse_row = 8 then    if mouse_col = 0 then      gGame.restartcode()    else      if mouse_col = 3 then        gGame.sendscorecode()      end if    end if  end ifend

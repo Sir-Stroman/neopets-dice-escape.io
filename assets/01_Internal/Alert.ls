@@ -1,0 +1,1 @@
+on new me  return meendon alertHook me, err, Msg  alert(err && Msg)  return 1end

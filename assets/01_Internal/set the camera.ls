@@ -1,0 +1,1 @@
+on setCamera pcamera, pView  case pView of    "l":      rot = -1    "r":      rot = 1  end case  pcamera.rotate(0, 0, rot)end

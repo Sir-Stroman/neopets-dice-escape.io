@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Die Face Tester</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #222;
+        }
+        canvas {
+            display: block;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 5px;
+        }
+        #controls {
+            margin-top: 15px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #face-info {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div>Die Face Tester</div>
+        <div id="face-info">Current Face: 1</div>
+        <div id="controls">
+            <div>Set Face Up:</div>
+            <button onclick="setFace(1)">Face 1</button>
+            <button onclick="setFace(2)">Face 2</button>
+            <button onclick="setFace(3)">Face 3</button>
+            <button onclick="setFace(4)">Face 4</button>
+            <button onclick="setFace(5)">Face 5</button>
+            <button onclick="setFace(6)">Face 6</button>
+        </div>
+        <div style="margin-top: 15px;">
+            <label>
+                <input type="checkbox" id="autoRotate" checked>
+                Auto Rotate
+            </label>
+        </div>
+    </div>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+        }
+    }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x333333);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(200, 200, 200);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.6);
+        directionalLight1.position.set(-442, 800, 444);
+        scene.add(directionalLight1);
+
+        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.6);
+        directionalLight2.position.set(431, 800, 429);
+        scene.add(directionalLight2);
+
+        // Load die face textures
+        const textureLoader = new THREE.TextureLoader();
+        const textures = {};
+        const texturePromises = [];
+
+        for (let i = 1; i <= 6; i++) {
+            const promise = new Promise((resolve) => {
+                textureLoader.load(
+                    `/assets/textures/3d Cast_${5 + i}_die_${i}.png`,
+                    (texture) => {
+                        texture.colorSpace = THREE.SRGBColorSpace;
+                        textures[`dieFace${i}`] = texture;
+                        resolve();
+                    }
+                );
+            });
+            texturePromises.push(promise);
+        }
+
+        let die = null;
+        let autoRotate = true;
+
+        Promise.all(texturePromises).then(() => {
+            console.log('All textures loaded');
+
+            // Create die geometry
+            const TILE_SIZE = 100;
+            const geometry = new THREE.BoxGeometry(TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+            // Create materials for each face
+            // Three.js box order: Right, Left, Top, Bottom, Front, Back
+            // Corrected: faces 3 and 4 swapped
+            const materials = [
+                new THREE.MeshBasicMaterial({ map: textures.dieFace3 }), // Right = Face 3
+                new THREE.MeshBasicMaterial({ map: textures.dieFace4 }), // Left = Face 4
+                new THREE.MeshBasicMaterial({ map: textures.dieFace1 }), // Top = Face 1
+                new THREE.MeshBasicMaterial({ map: textures.dieFace6 }), // Bottom = Face 6
+                new THREE.MeshBasicMaterial({ map: textures.dieFace5 }), // Front = Face 5
+                new THREE.MeshBasicMaterial({ map: textures.dieFace2 })  // Back = Face 2
+            ];
+
+            die = new THREE.Mesh(geometry, materials);
+            die.castShadow = true;
+            die.receiveShadow = true;
+            scene.add(die);
+
+            // Start with face 1 up
+            setFace(1);
+        });
+
+        function setInitialRotation(die, faceUp) {
+            let rotation;
+            switch (faceUp) {
+                case 1:
+                    rotation = new THREE.Vector3(0, 0, 0);
+                    break;
+                case 2:
+                    rotation = new THREE.Vector3(90, 0, 0);
+                    break;
+                case 3:
+                    rotation = new THREE.Vector3(0, 0, 90);
+                    break;
+                case 4:
+                    rotation = new THREE.Vector3(0, 0, -90);
+                    break;
+                case 5:
+                    rotation = new THREE.Vector3(-90, 0, 0);
+                    break;
+                case 6:
+                    rotation = new THREE.Vector3(180, 0, 0);
+                    break;
+                default:
+                    rotation = new THREE.Vector3(0, 0, 0);
+            }
+
+            die.rotation.set(
+                THREE.MathUtils.degToRad(rotation.x),
+                THREE.MathUtils.degToRad(rotation.y),
+                THREE.MathUtils.degToRad(rotation.z)
+            );
+        }
+
+        function determineFacing(die) {
+            const upVector = new THREE.Vector3(0, 1, 0);
+
+            const faceNormals = [
+                { face: 3, normal: new THREE.Vector3(1, 0, 0) },   // Right
+                { face: 4, normal: new THREE.Vector3(-1, 0, 0) },  // Left
+                { face: 1, normal: new THREE.Vector3(0, 1, 0) },   // Top
+                { face: 6, normal: new THREE.Vector3(0, -1, 0) },  // Bottom
+                { face: 5, normal: new THREE.Vector3(0, 0, 1) },   // Front
+                { face: 2, normal: new THREE.Vector3(0, 0, -1) }   // Back
+            ];
+
+            let maxDot = -1;
+            let topFace = 1;
+
+            for (const {face, normal} of faceNormals) {
+                const rotatedNormal = normal.clone().applyQuaternion(die.quaternion);
+                const dot = rotatedNormal.dot(upVector);
+
+                if (dot > maxDot) {
+                    maxDot = dot;
+                    topFace = face;
+                }
+            }
+
+            return topFace;
+        }
+
+        window.setFace = function(faceNum) {
+            if (!die) return;
+
+            console.log(`Setting face ${faceNum}`);
+            setInitialRotation(die, faceNum);
+
+            setTimeout(() => {
+                const detected = determineFacing(die);
+                console.log(`Requested face ${faceNum}, detected face ${detected}`);
+                document.getElementById('face-info').textContent =
+                    `Requested: Face ${faceNum} | Detected: Face ${detected} ${faceNum === detected ? '✓' : '✗ MISMATCH'}`;
+                document.getElementById('face-info').style.color = faceNum === detected ? '#4CAF50' : '#f44336';
+            }, 50);
+        };
+
+        document.getElementById('autoRotate').addEventListener('change', (e) => {
+            autoRotate = e.target.checked;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (die && autoRotate) {
+                die.rotation.y += 0.005;
+            }
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

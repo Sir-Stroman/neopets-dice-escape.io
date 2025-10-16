@@ -1,0 +1,1 @@
+global gGame, ggameover, grounddoneon exitFrame me  if ggameover = 0 then    onscoreboardclicked()  end if  if grounddone then    if the keyPressed <> EMPTY then      goNextRound()    end if  end if  callStepFrame()  go(the frame)end

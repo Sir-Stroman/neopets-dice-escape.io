@@ -1,0 +1,1 @@
+global gGameon checkForCheats  gGame.checkCheat(numToChar((the key).charToNum))end

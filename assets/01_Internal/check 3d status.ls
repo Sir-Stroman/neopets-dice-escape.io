@@ -1,0 +1,1 @@
+on exitFrame me  put "introframe"  num_ready = 0  num_to_load = the number of castMembers of castLib "3d Cast"  repeat with x = 1 to num_to_load    mem = member(x, "3d Cast")    if mem.mediaReady = 1 then      num_ready = num_ready + 1      next repeat    end if  end repeat  if num_ready = num_to_load then  else    go(the frame)  end ifend
